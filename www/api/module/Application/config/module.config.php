@@ -37,21 +37,52 @@ return array(
                     ),
                 ),
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
+                'child_routes' => array(),
+            ),
+            'user' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/api/user/username',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\User',
+                    ),
+                ),
+                'may_terminate' => true,
+            ),
+            'profile' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/api/profile[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Profile',
                     ),
                 ),
             ),
+            'event' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/api/event[/:id]',
+                    'constraints' => array(
+                        'id' => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Event',
+                    ),
+                ),
+            ),
+            'participation' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/api/participation/id',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Participation',
+                    ),
+                ),
+            ),
+
         ),
     ),
     'service_manager' => array(
@@ -75,10 +106,17 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => Controller\IndexController::class
+            'Application\Controller\Index' => Controller\IndexController::class,
+            'Application\Controller\User' => Controller\UserController::class,
+            'Application\Controller\Profile' => Controller\ProfileController::class,
+            'Application\Controller\Event' => Controller\EventController::class,
+            'Application\Controller\Participation' => Controller\ParticipationController::class
         ),
     ),
     'view_manager' => array(
+        'Strategies' => array(
+            'ViewJsonStrategy',
+        ),
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',

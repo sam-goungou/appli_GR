@@ -9,6 +9,8 @@
 
 namespace Application;
 
+use Application\Model\User\MYSQLDataMapper;
+use Zend\Db\Adapter\Adapter;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
@@ -24,6 +26,26 @@ class Module
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
+    }
+    
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'userMysqlDataMapper' => function () {
+                    $adapter = new Adapter(array(
+                        'driver' => 'Mysqli',
+                        'database' => 'applistage_bdd',
+                        'username' => 'sam',
+                        'password' => 'Staraci771'
+                    ));
+
+                    $dm = new MYSQLDataMapper($adapter);
+
+                    return $dm;
+                }
+            )
+        );
     }
 
     public function getAutoloaderConfig()
